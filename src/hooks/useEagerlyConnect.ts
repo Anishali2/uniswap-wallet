@@ -3,7 +3,7 @@ import { Connection, gnosisSafeConnection, networkConnection } from '@/connectio
 import { getConnection } from '@/connection/utils'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/state/hooks'
-import { updateSelectedWallet } from '@/state/user/reducer'
+// import { updateSelectedWallet } from '@/state/user/reducer'
 
 async function connect(connector: Connector) {
   try {
@@ -27,7 +27,7 @@ export default function useEagerlyConnect() {
     try {
       selectedConnection = getConnection(selectedWallet)
     } catch {
-      dispatch(updateSelectedWallet({ wallet: undefined }))
+      // dispatch(updateSelectedWallet({ wallet: undefined }))
     // alert("Dispatch")
     }
   }

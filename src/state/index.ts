@@ -8,7 +8,6 @@ import application from './application/reducer'
 import connection from './connection/reducer'
 import { updateVersion } from './global/actions'
 // import { routingApi } from './routing/slice'
-import user from './user/reducer'
 import wallets from './wallets/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
@@ -16,7 +15,6 @@ const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 const store = configureStore({
   reducer: {
     application,
-    user,
     connection,
     wallets,
     // multicall: multicall.reducer,

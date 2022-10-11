@@ -1,4 +1,3 @@
-import { Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
 import { sendAnalyticsEvent, user } from '@/analytics';
@@ -6,36 +5,37 @@ import {
   CUSTOM_USER_PROPERTIES,
   EventName,
   WALLET_CONNECTION_RESULT,
-} from 'analytics/constants';
-import { sendEvent } from 'components/analytics';
-import { AutoColumn } from 'components/Column';
-import { AutoRow } from 'components/Row';
+} from '@/analytics/constants';
+import { sendEvent } from '@/components/analytics';
+import { AutoColumn } from '@/components/Column';
+import { AutoRow } from '@/components/Row';
 import {
   getConnection,
   getConnectionName,
   getIsCoinbaseWallet,
   getIsInjected,
   getIsMetaMask,
-} from 'connection/utils';
-import { RedesignVariant, useRedesignFlag } from 'featureFlags/flags/redesign';
-import usePrevious from 'hooks/usePrevious';
+} from '@/connection/utils';
+import {
+  RedesignVariant,
+  useRedesignFlag,
+} from '@/featureFlags/flags/redesign';
+import usePrevious from '@/hooks/usePrevious';
 import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft } from 'react-feather';
-import { updateConnectionError } from 'state/connection/reducer';
-import { useAppDispatch, useAppSelector } from 'state/hooks';
-import { updateSelectedWallet } from 'state/user/reducer';
-import { useConnectedWallets } from 'state/wallets/hooks';
+import { updateConnectionError } from '@/state/connection/reducer';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+// import { updateSelectedWallet } from '@/state/user/reducer';
+import { useConnectedWallets } from '@/state/wallets/hooks';
 import styled from 'styled-components/macro';
-import { isMobile } from 'utils/userAgent';
+import { isMobile } from '@/utils/userAgent';
 
-import { ReactComponent as Close } from '../../assets/images/x.svg';
 import {
   useModalIsOpen,
   useToggleWalletModal,
 } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/reducer';
-import { ExternalLink, ThemedText } from '../../theme';
-import AccountDetails from '../AccountDetails';
+import { ThemedText } from '../../theme';
 import { LightCard } from '../Card';
 import Modal from '../Modal';
 import {
@@ -57,12 +57,6 @@ const CloseIcon = styled.div`
   &:hover {
     cursor: pointer;
     opacity: ${({ theme }) => theme.opacity.hover};
-  }
-`;
-
-const CloseColor = styled(Close)`
-  path {
-    stroke: ${({ theme }) => theme.deprecated_text4};
   }
 `;
 
@@ -172,12 +166,12 @@ const sendAnalyticsEventAndUserInfo = (
 };
 
 export default function WalletModal({
-  pendingTransactions,
-  confirmedTransactions,
+  pendingpactions,
+  confirmedpactions,
   ENSName,
 }: {
-  pendingTransactions: string[]; // hashes of pending
-  confirmedTransactions: string[]; // hashes of confirmed
+  pendingpactions: string[]; // hashes of pending
+  confirmedpactions: string[]; // hashes of confirmed
   ENSName?: string;
 }) {
   const dispatch = useAppDispatch();
@@ -276,8 +270,8 @@ export default function WalletModal({
 
         await connector.activate();
 
-        dispatch(updateSelectedWallet({ wallet: connectionType }));
-      } catch (error) {
+        // dispatch(updateSelectedWallet({ wallet: connectionType }));
+      } catch (error:any) {
         console.debug(`web3-react connection error: ${error}`);
         dispatch(
           updateConnectionError({ connectionType, error: error.message }),
@@ -342,13 +336,14 @@ export default function WalletModal({
   function getModalContent() {
     if (walletView === WALLET_VIEWS.ACCOUNT) {
       return (
-        <AccountDetails
-          toggleWalletModal={toggleWalletModal}
-          pendingTransactions={pendingTransactions}
-          confirmedTransactions={confirmedTransactions}
-          ENSName={ENSName}
-          openOptions={openOptions}
-        />
+        // <AccountDetails
+        //   toggleWalletModal={toggleWalletModal}
+        //   pendingpactions={pendingpactions}
+        //   confirmedpactions={confirmedpactions}
+        //   ENSName={ENSName}
+        //   openOptions={openOptions}
+        // />
+        <p>Account Details</p>
       );
     }
 
@@ -375,7 +370,7 @@ export default function WalletModal({
       headerRow = (
         <HeaderRow redesignFlag={redesignFlagEnabled}>
           <HoverText>
-            <Trans>Connect a wallet</Trans>
+            <p>Connect a wallet</p>
           </HoverText>
         </HeaderRow>
       );
@@ -390,40 +385,17 @@ export default function WalletModal({
       return redesignFlagEnabled ? (
         <AutoRow style={{ flexWrap: 'nowrap', padding: '4px 16px' }}>
           <ThemedText.BodySecondary fontSize={16} lineHeight={'24px'}>
-            <Trans>
-              By connecting a wallet, you agree to Uniswap Labs’{' '}
-              <ExternalLink href="https://uniswap.org/terms-of-service/">
-                Terms of Service
-              </ExternalLink>{' '}
-              and consent to its{' '}
-              <ExternalLink href="https://uniswap.org/privacy-policy">
-                Privacy Policy
-              </ExternalLink>
-              .
-            </Trans>
+            <p>By connecting a wallet, you agree to Uniswap Labs’ .</p>
           </ThemedText.BodySecondary>
         </AutoRow>
       ) : (
         <LightCard>
           <AutoRow style={{ flexWrap: 'nowrap' }}>
             <ThemedText.DeprecatedBody fontSize={12}>
-              <Trans>
-                By connecting a wallet, you agree to Uniswap Labs’{' '}
-                <ExternalLink
-                  style={{ textDecoration: 'underline' }}
-                  href="https://uniswap.org/terms-of-service/"
-                >
-                  Terms of Service
-                </ExternalLink>{' '}
-                and acknowledge that you have read and understand the Uniswap{' '}
-                <ExternalLink
-                  style={{ textDecoration: 'underline' }}
-                  href="https://uniswap.org/disclaimer/"
-                >
-                  Protocol Disclaimer
-                </ExternalLink>
-                .
-              </Trans>
+              <p>
+                By connecting a wallet, you agree to Uniswap Labs’ and
+                acknowledge that you have read and understand the Uniswap .
+              </p>
             </ThemedText.DeprecatedBody>
           </AutoRow>
         </LightCard>
@@ -432,9 +404,13 @@ export default function WalletModal({
 
     return (
       <UpperSection>
-        <CloseIcon data-testid="wallet-modal-close" onClick={toggleWalletModal}>
-          <CloseColor />
-        </CloseIcon>
+        <div
+          className="bg-black w-2 h-2 "
+          data-testid="wallet-modal-close"
+          onClick={toggleWalletModal}
+        >
+          x
+        </div>
         {headerRow}
         <ContentWrapper>
           <AutoColumn gap="16px">
@@ -459,8 +435,9 @@ export default function WalletModal({
 
   return (
     <Modal
-      isOpen={walletModalOpen}
       onDismiss={toggleWalletModal}
+      isOpen={true}
+      //   isOpen={walletModalOpen}
       minHeight={false}
       maxHeight={90}
       redesignFlag={redesignFlagEnabled}

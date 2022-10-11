@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import styles from '@/styles/Home.module.css';
+// import WalletModal from '@/components/WalletModal';
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
           Get started by editing{` `}
           <code className={styles.code}>src/pages/index.tsx</code>
         </p>
-
+        {/* <WalletModal  pendingTransactions={[]} confirmedTransactions={[]} /> */}
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h2>Documentation &rarr;</h2>
