@@ -1,4 +1,3 @@
-import { Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
 import { sendAnalyticsEvent, user } from '@/analytics';
@@ -6,48 +5,40 @@ import {
   CUSTOM_USER_PROPERTIES,
   EventName,
   WALLET_CONNECTION_RESULT,
-} from 'analytics/constants';
-import { sendEvent } from 'components/analytics';
-import { AutoColumn } from 'components/Column';
-import { AutoRow } from 'components/Row';
+} from '@/analytics/constants';
 import {
   getConnection,
   getConnectionName,
-  getIsCoinbaseWallet,
+  // getIsCoinbaseWallet,
   getIsInjected,
   getIsMetaMask,
-} from 'connection/utils';
-import { RedesignVariant, useRedesignFlag } from 'featureFlags/flags/redesign';
-import usePrevious from 'hooks/usePrevious';
+} from '@/connection/utils';
+import usePrevious from '@/hooks/usePrevious';
 import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft } from 'react-feather';
-import { updateConnectionError } from 'state/connection/reducer';
-import { useAppDispatch, useAppSelector } from 'state/hooks';
-import { updateSelectedWallet } from 'state/user/reducer';
-import { useConnectedWallets } from 'state/wallets/hooks';
+import { updateConnectionError } from '@/state/connection/reducer';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { updateSelectedWallet } from '@/state/user/reducer';
+import { useConnectedWallets } from '@/state/wallets/hooks';
 import styled from 'styled-components/macro';
-import { isMobile } from 'utils/userAgent';
+import { isMobile } from '@/utils/userAgent';
 
-import { ReactComponent as Close } from '../../assets/images/x.svg';
 import {
   useModalIsOpen,
   useToggleWalletModal,
 } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/reducer';
-import { ExternalLink, ThemedText } from '../../theme';
-import AccountDetails from '../AccountDetails';
-import { LightCard } from '../Card';
-import Modal from '../Modal';
-import {
-  CoinbaseWalletOption,
-  OpenCoinbaseWalletOption,
-} from './CoinbaseWalletOption';
+// import Modal from '../Modal';
+// import {
+//   CoinbaseWalletOption,
+//   OpenCoinbaseWalletOption,
+// } from './CoinbaseWalletOption';
 import {
   InjectedOption,
   InstallMetaMaskOption,
   MetaMaskOption,
 } from './InjectedOption';
-import PendingView from './PendingView';
+// import PendingView from './PendingView';
 import { WalletConnectOption } from './WalletConnectOption';
 
 const CloseIcon = styled.div`
@@ -57,12 +48,6 @@ const CloseIcon = styled.div`
   &:hover {
     cursor: pointer;
     opacity: ${({ theme }) => theme.opacity.hover};
-  }
-`;
-
-const CloseColor = styled(Close)`
-  path {
-    stroke: ${({ theme }) => theme.deprecated_text4};
   }
 `;
 
@@ -186,8 +171,7 @@ export default function WalletModal({
 
   const [connectedWallets, addWalletToConnectedWallets] = useConnectedWallets();
 
-  const redesignFlag = useRedesignFlag();
-  const redesignFlagEnabled = redesignFlag === RedesignVariant.Enabled;
+  const redesignFlagEnabled = true;
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT);
   const [lastActiveWalletAddress, setLastActiveWalletAddress] = useState<
     string | undefined
@@ -263,11 +247,11 @@ export default function WalletModal({
       const connectionType = getConnection(connector).type;
 
       // log selected wallet
-      sendEvent({
-        category: 'Wallet',
-        action: 'Change Wallet',
-        label: connectionType,
-      });
+      // sendEvent({
+      //   category: 'Wallet',
+      //   action: 'Change Wallet',
+      //   label: connectionType,
+      // });
 
       try {
         setPendingConnector(connector);
@@ -277,7 +261,7 @@ export default function WalletModal({
         await connector.activate();
 
         dispatch(updateSelectedWallet({ wallet: connectionType }));
-      } catch (error) {
+      } catch (error: any) {
         console.debug(`web3-react connection error: ${error}`);
         dispatch(
           updateConnectionError({ connectionType, error: error.message }),
@@ -295,19 +279,18 @@ export default function WalletModal({
   function getOptions() {
     const isInjected = getIsInjected();
     const isMetaMask = getIsMetaMask();
-    const isCoinbaseWallet = getIsCoinbaseWallet();
+    // const isCoinbaseWallet = getIsCoinbaseWallet();
 
-    const isCoinbaseWalletBrowser = isMobile && isCoinbaseWallet;
+    // const isCoinbaseWalletBrowser = isMobile && isCoinbaseWallet;
     const isMetaMaskBrowser = isMobile && isMetaMask;
-    const isInjectedMobileBrowser =
-      isCoinbaseWalletBrowser || isMetaMaskBrowser;
+    const isInjectedMobileBrowser = isMetaMaskBrowser;
 
     let injectedOption;
     if (!isInjected) {
       if (!isMobile) {
         injectedOption = <InstallMetaMaskOption />;
       }
-    } else if (!isCoinbaseWallet) {
+    } else {
       if (isMetaMask) {
         injectedOption = <MetaMaskOption tryActivation={tryActivation} />;
       } else {
@@ -315,14 +298,14 @@ export default function WalletModal({
       }
     }
 
-    let coinbaseWalletOption;
-    if (isMobile && !isInjectedMobileBrowser) {
-      coinbaseWalletOption = <OpenCoinbaseWalletOption />;
-    } else if (!isMobile || isCoinbaseWalletBrowser) {
-      coinbaseWalletOption = (
-        <CoinbaseWalletOption tryActivation={tryActivation} />
-      );
-    }
+    // let coinbaseWalletOption;
+    // if (isMobile && !isInjectedMobileBrowser) {
+    //   coinbaseWalletOption = <OpenCoinbaseWalletOption />;
+    // } else if (!isMobile || isCoinbaseWalletBrowser) {
+    //   coinbaseWalletOption = (
+    //     <CoinbaseWalletOption tryActivation={tryActivation} />
+    //   );
+    // }
 
     const walletConnectionOption =
       (!isInjectedMobileBrowser && (
@@ -333,7 +316,7 @@ export default function WalletModal({
     return (
       <>
         {injectedOption}
-        {coinbaseWalletOption}
+        {/* {coinbaseWalletOption} */}
         {walletConnectionOption}
       </>
     );
@@ -342,13 +325,14 @@ export default function WalletModal({
   function getModalContent() {
     if (walletView === WALLET_VIEWS.ACCOUNT) {
       return (
-        <AccountDetails
-          toggleWalletModal={toggleWalletModal}
-          pendingTransactions={pendingTransactions}
-          confirmedTransactions={confirmedTransactions}
-          ENSName={ENSName}
-          openOptions={openOptions}
-        />
+        // <AccountDetails
+        //   toggleWalletModal={toggleWalletModal}
+        //   pendingTransactions={pendingTransactions}
+        //   confirmedTransactions={confirmedTransactions}
+        //   ENSName={ENSName}
+        //   openOptions={openOptions}
+        // />
+        <div>Account Details</div>
       );
     }
 
@@ -373,11 +357,11 @@ export default function WalletModal({
       );
     } else {
       headerRow = (
-        <HeaderRow redesignFlag={redesignFlagEnabled}>
-          <HoverText>
-            <Trans>Connect a wallet</Trans>
-          </HoverText>
-        </HeaderRow>
+        // <HeaderRow redesignFlag={redesignFlagEnabled}>
+        <HoverText>
+          <p>Connect a wallet</p>
+        </HoverText>
+        // </HeaderRow>
       );
     }
 
@@ -388,70 +372,36 @@ export default function WalletModal({
       if (redesignFlagEnabled && walletView === WALLET_VIEWS.PENDING)
         return null;
       return redesignFlagEnabled ? (
-        <AutoRow style={{ flexWrap: 'nowrap', padding: '4px 16px' }}>
-          <ThemedText.BodySecondary fontSize={16} lineHeight={'24px'}>
-            <Trans>
-              By connecting a wallet, you agree to Uniswap Labs’{' '}
-              <ExternalLink href="https://uniswap.org/terms-of-service/">
-                Terms of Service
-              </ExternalLink>{' '}
-              and consent to its{' '}
-              <ExternalLink href="https://uniswap.org/privacy-policy">
-                Privacy Policy
-              </ExternalLink>
-              .
-            </Trans>
-          </ThemedText.BodySecondary>
-        </AutoRow>
+        // <AutoRow style={{ flexWrap: 'nowrap', padding: '4px 16px' }}>
+        <div>By connecting a wallet, you agree to Uniswap Labs’ .</div>
       ) : (
-        <LightCard>
-          <AutoRow style={{ flexWrap: 'nowrap' }}>
-            <ThemedText.DeprecatedBody fontSize={12}>
-              <Trans>
-                By connecting a wallet, you agree to Uniswap Labs’{' '}
-                <ExternalLink
-                  style={{ textDecoration: 'underline' }}
-                  href="https://uniswap.org/terms-of-service/"
-                >
-                  Terms of Service
-                </ExternalLink>{' '}
-                and acknowledge that you have read and understand the Uniswap{' '}
-                <ExternalLink
-                  style={{ textDecoration: 'underline' }}
-                  href="https://uniswap.org/disclaimer/"
-                >
-                  Protocol Disclaimer
-                </ExternalLink>
-                .
-              </Trans>
-            </ThemedText.DeprecatedBody>
-          </AutoRow>
-        </LightCard>
+        console.log('By connecting a wallet, you agree to Uniswap Labs')
       );
     }
 
     return (
       <UpperSection>
-        <CloseIcon data-testid="wallet-modal-close" onClick={toggleWalletModal}>
-          <CloseColor />
-        </CloseIcon>
+        <CloseIcon
+          data-testid="wallet-modal-close"
+          onClick={toggleWalletModal}
+        ></CloseIcon>
         {headerRow}
         <ContentWrapper>
-          <AutoColumn gap="16px">
-            {walletView === WALLET_VIEWS.PENDING && pendingConnector && (
-              <PendingView
-                openOptions={openOptions}
-                connector={pendingConnector}
-                error={!!pendingError}
-                tryActivation={tryActivation}
-              />
-            )}
-            {walletView !== WALLET_VIEWS.PENDING && (
-              <OptionGrid data-testid="option-grid">{getOptions()}</OptionGrid>
-            )}
-            {!pendingError &&
-              getTermsOfService(redesignFlagEnabled, walletView)}
-          </AutoColumn>
+          {/* <AutoColumn gap="16px"> */}
+          {walletView === WALLET_VIEWS.PENDING && pendingConnector && (
+            // <PendingView
+            //   openOptions={openOptions}
+            //   connector={pendingConnector}
+            //   error={!!pendingError}
+            //   tryActivation={tryActivation}
+            // />
+            <p>Pending View</p>
+          )}
+          {walletView !== WALLET_VIEWS.PENDING && (
+            <OptionGrid data-testid="option-grid">{getOptions()}</OptionGrid>
+          )}
+          {!pendingError && getTermsOfService(redesignFlagEnabled, walletView)}
+          {/* </AutoColumn> */}
         </ContentWrapper>
       </UpperSection>
     );
