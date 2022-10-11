@@ -1,4 +1,4 @@
-import { outboundLink } from '@/components/analytics';
+// import { outboundLink } from '@/components/analytics';
 import useCopyClipboard from '@/hooks/useCopyClipboard';
 import React, {
   forwardRef,
@@ -181,15 +181,15 @@ function handleClickExternalLink(event: React.MouseEvent<HTMLAnchorElement>) {
 
   // don't prevent default, don't redirect if it's a new tab
   if (target === '_blank' || event.ctrlKey || event.metaKey) {
-    outboundLink({ label: anonymizedHref }, () => {
-      console.debug('Fired outbound link event', anonymizedHref);
-    });
+    // outboundLink({ label: anonymizedHref }, () => {
+    //   console.debug('Fired outbound link event', anonymizedHref);
+    // });
   } else {
     event.preventDefault();
     // send a ReactGA event and then trigger a location change
-    outboundLink({ label: anonymizedHref }, () => {
-      window.location.href = anonymizedHref;
-    });
+    // outboundLink({ label: anonymizedHref }, () => {
+    //   window.location.href = anonymizedHref;
+    // });
   }
 }
 
@@ -481,14 +481,14 @@ export const SpinnerSVG = styled.svg`
   ${SpinnerCss}
 `;
 
-const BackArrowLink = styled(StyledInternalLink)`
-  color: ${({ theme }) => theme.deprecated_text1};
-`;
+// const BackArrowLink = styled(StyledInternalLink)`
+//   color: ${({ theme }) => theme.deprecated_text1};
+// `;
 export function BackArrow({ to }: { to: string }) {
   return (
-    <BackArrowLink to={to}>
-      <ArrowLeft />
-    </BackArrowLink>
+    // <BackArrowLink to={to}>
+    <ArrowLeft />
+    // </BackArrowLink>
   );
 }
 

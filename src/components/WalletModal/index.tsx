@@ -6,7 +6,7 @@ import {
   EventName,
   WALLET_CONNECTION_RESULT,
 } from '@/analytics/constants';
-import { sendEvent } from '@/components/analytics';
+// import { sendEvent } from '@/components/analytics';
 import { AutoColumn } from '@/components/Column';
 import { AutoRow } from '@/components/Row';
 import {
@@ -61,7 +61,6 @@ const CloseIcon = styled.div`
 `;
 
 const Wrapper = styled.div<{ redesignFlag?: boolean }>`
-  ${({ theme }) => theme.flexColumnNoWrap}
   background-color: ${({ redesignFlag, theme }) =>
     redesignFlag && theme.backgroundSurface};
   outline: ${({ theme, redesignFlag }) =>
@@ -257,11 +256,11 @@ export default function WalletModal({
       const connectionType = getConnection(connector).type;
 
       // log selected wallet
-      sendEvent({
-        category: 'Wallet',
-        action: 'Change Wallet',
-        label: connectionType,
-      });
+      // sendEvent({
+      //   category: 'Wallet',
+      //   action: 'Change Wallet',
+      //   label: connectionType,
+      // });
 
       try {
         setPendingConnector(connector);
@@ -271,7 +270,7 @@ export default function WalletModal({
         await connector.activate();
 
         // dispatch(updateSelectedWallet({ wallet: connectionType }));
-      } catch (error:any) {
+      } catch (error: any) {
         console.debug(`web3-react connection error: ${error}`);
         dispatch(
           updateConnectionError({ connectionType, error: error.message }),
@@ -434,17 +433,17 @@ export default function WalletModal({
   }
 
   return (
-    <Modal
-      onDismiss={toggleWalletModal}
-      isOpen={true}
-      //   isOpen={walletModalOpen}
-      minHeight={false}
-      maxHeight={90}
-      redesignFlag={redesignFlagEnabled}
-    >
-      <Wrapper data-testid="wallet-modal" redesignFlag={redesignFlagEnabled}>
-        {getModalContent()}
-      </Wrapper>
-    </Modal>
+    // <Modal
+    //   onDismiss={toggleWalletModal}
+    //   isOpen={true}
+    //   //   isOpen={walletModalOpen}
+    //   minHeight={false}
+    //   maxHeight={90}
+    //   redesignFlag={redesignFlagEnabled}
+    // >
+    <Wrapper data-testid="wallet-modal" redesignFlag={redesignFlagEnabled}>
+      {getModalContent()}
+    </Wrapper>
+    // </Modal>
   );
 }
